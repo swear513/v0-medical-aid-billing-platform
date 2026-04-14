@@ -15,47 +15,58 @@ import {
 export function StatsCards() {
   const stats = useStore((state) => state.dashboardStats);
 
+  // ✅ Fallback to prevent undefined crashes
+  const safeStats = stats ?? {
+    totalClaims: 0,
+    totalBilled: 0,
+    totalPaid: 0,
+    totalOutstanding: 0,
+    validationPassRate: 0,
+    rejectionRate: 0,
+  };
+
   const cards = [
     {
       title: "Total Claims",
-      value: stats.totalClaims.toString(),
+      value: safeStats.totalClaims.toString(),
       description: "All time claims",
       icon: FileText,
       trend: null,
     },
     {
       title: "Total Billed",
-      value: formatCurrency(stats.totalBilled),
+      value: formatCurrency(safeStats.totalBilled),
       description: "Cumulative billing",
       icon: DollarSign,
       trend: null,
     },
     {
       title: "Total Paid",
-      value: formatCurrency(stats.totalPaid),
+      value: formatCurrency(safeStats.totalPaid),
       description: "Payments received",
       icon: TrendingUp,
-      trend: stats.totalBilled > 0
-        ? `${((stats.totalPaid / stats.totalBilled) * 100).toFixed(0)}% of billed`
-        : null,
+      trend:
+        safeStats.totalBilled > 0
+          ? `${((safeStats.totalPaid / safeStats.totalBilled) * 100).toFixed(0)}% of billed`
+          : null,
     },
     {
       title: "Outstanding",
-      value: formatCurrency(stats.totalOutstanding),
+      value: formatCurrency(safeStats.totalOutstanding),
       description: "Pending payment",
       icon: Clock,
       trend: null,
     },
     {
       title: "Validation Rate",
-      value: formatPercentage(stats.validationPassRate),
+      value: formatPercentage(safeStats.validationPassRate),
       description: "Pass rate",
       icon: CheckCircle,
       trend: null,
     },
     {
       title: "Rejection Rate",
-      value: formatPercentage(stats.rejectionRate),
+      value: formatPercentage(safeStats.rejectionRate),
       description: "Scheme rejections",
       icon: AlertTriangle,
       trend: null,
