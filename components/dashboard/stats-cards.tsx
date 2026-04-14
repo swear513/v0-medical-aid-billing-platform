@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 export function StatsCards() {
-  const stats = useStore((state) => state.getDashboardStats());
+  const stats = useStore((state) => state.dashboardStats);
 
   const cards = [
     {
